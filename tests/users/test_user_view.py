@@ -1,0 +1,47 @@
+"""
+Test module for the user resource/endpoint.
+"""
+from starlette.testclient import TestClient
+import pytest
+
+from app.main import app
+from app.users.crud import create_user
+from app.database.base import db_session
+from app.users.schema import UserCreate, User
+
+client = TestClient(app)
+
+
+@pytest.fixture()
+def test_user():
+    test_user_create = UserCreate(
+        first_name="john",
+        surname="smith",
+        email="johnsmith@live.co.uk",
+        password="password",
+    )
+    test_user_get = User(
+        id="1",
+        is_active=True,
+        first_name="john",
+        surname="smith",
+        email="johnsmith@live.co.uk",
+    )
+    return test_user_create, test_user_get
+
+
+def test_user_creation_success(db_fixture, test_user):
+    test_user_create, test_user_get = test_user
+    response = client.post("/users/", json=test_user_create.dict())
+
+    assert response.status_code == 200
+    assert response.json() == test_user_get
+
+
+def test_user_get(db_fixture, test_user):
+    test_user_create, test_user_get = test_user
+    user = create_user(db_session, test_user_create)
+
+    response = client.get(f"/users/{user.id}")
+    assert response.status_code == 200
+    assert response.json() == test_user_get

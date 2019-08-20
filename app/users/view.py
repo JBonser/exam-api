@@ -3,7 +3,8 @@ This view module is solely responsible for handling the routing of
 the application. It is the entrypoint of any web request for the user
 resource.
 """
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from starlette.status import HTTP_400_BAD_REQUEST
 from sqlalchemy.orm import Session
 
 from app.users import crud, schema
@@ -16,6 +17,11 @@ router = APIRouter()
 
 @router.post("/", response_model=schema.User)
 async def create_user(user: schema.UserCreate, db: Session = Depends(get_db)):
+    if crud.get_user_by_email(db, user.email):
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST,
+            detail="A user with this e-mail already exists",
+        )
     return crud.create_user(db=db, user=user)
 
 

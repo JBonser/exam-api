@@ -20,7 +20,7 @@ pip install -e .
 If running for the first time you will need to create the DB, run:
 
 ```bash
-alembic upgrade
+alembic upgrade head
 ```
 
 To run the application in development simply call:
@@ -42,6 +42,18 @@ pytest tests/
 ```bash
 pytest --cov=app/ tests/
 ```
+
+## Updating the database models
+
+If you change any of the database models you will need to ruin alembic to allow it to detect any schema changes,
+so that it can try and generate the migration script for you. To do this you need to run:
+
+```bash
+alembic revision --autogenerate
+```
+
+This will generate a database migration revision which you should then go and inspect to see what migrations have been
+generated. This process can sometimes work incorrectly so it's important to check this revision file before comitting.
 
 ## Project Spec
 

@@ -40,11 +40,11 @@ def test_user_creation_success(db_fixture, test_user):
 
 def test_user_creation_fails_with_duplicate_entry(db_fixture, test_user):
     test_user_create, test_user_get = test_user
-    user = create_user(db_session, test_user_create)
+    create_user(db_session, test_user_create)
 
     response = client.post(f"/users/", json=test_user_create.dict())
     assert response.status_code == 400
-    assert "A user with this e-mail already exists" in response.json()["detail"]
+    assert "user with this email already exists" in response.json()["detail"]
 
 
 def test_user_get(db_fixture, test_user, token_fixture):

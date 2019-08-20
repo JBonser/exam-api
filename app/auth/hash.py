@@ -1,8 +1,5 @@
 """
-This module is here to provide business level logic.
-The view, schema, crud and model modules have specific jobs which
-should not get littered with business logic. It is this module that should
-be used to place any of this additional behaviour.
+This module contains the password hashing functionality.
 """
 from passlib.context import CryptContext
 

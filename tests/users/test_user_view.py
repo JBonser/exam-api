@@ -38,10 +38,19 @@ def test_user_creation_success(db_fixture, test_user):
     assert response.json() == test_user_get
 
 
-def test_user_get(db_fixture, test_user):
+def test_user_get(db_fixture, test_user, token_fixture):
     test_user_create, test_user_get = test_user
     user = create_user(db_session, test_user_create)
 
     response = client.get(f"/users/{user.id}")
     assert response.status_code == 200
     assert response.json() == test_user_get
+
+
+def test_user_get_fails_without_authenticating(db_fixture, test_user):
+    test_user_create, test_user_get = test_user
+    user = create_user(db_session, test_user_create)
+
+    response = client.get(f"/users/{user.id}")
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Not authenticated"

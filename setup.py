@@ -18,5 +18,7 @@ setup(
         "passlib[bscrypt]",
         "pytest",
         "pytest-cov",
+        "python-multipart",
+        "PyJWT",
     ],
 )

@@ -29,6 +29,14 @@ To run the application in development simply call:
 uvicorn app.main:app --reload
 ```
 
+Navigate to:
+
+```bash
+http://127.0.0.1:8000/docs
+```
+
+You can now start interacting with the API using the interactive OpenAPI documentation.
+
 ## Running the Tests
 
 To run the unit tests use the unittest discovery like so:
